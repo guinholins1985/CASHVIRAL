@@ -1,4 +1,3 @@
-
 import { User, Video, Transaction, DailyTask, WithdrawalRequest } from '../types';
 
 export const mockUsers: User[] = [
@@ -9,17 +8,7 @@ export const mockUsers: User[] = [
   { id: 'u5', name: 'Eve', email: 'eve@example.com', avatar: 'https://picsum.photos/seed/eve/100', balance: 15.75, status: 'inactive', joinDate: '2023-10-15' },
 ];
 
-export const mockVideos: Video[] = Array.from({ length: 20 }, (_, i) => ({
-  id: `v${i + 1}`,
-  title: `Awesome Video Title That Is Quite Long #${i + 1}`,
-  thumbnail: `https://picsum.photos/seed/v${i + 1}/400/700`,
-  url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  duration: `${Math.floor(Math.random() * 5) + 1}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
-  views: Math.floor(Math.random() * 1000000),
-  likes: Math.floor(Math.random() * 50000),
-  uploader: `Creator ${i + 1}`,
-  uploaderAvatar: `https://picsum.photos/seed/c${i + 1}/50`,
-}));
+export const mockVideos: Video[] = [];
 
 
 export const mockTransactions: Transaction[] = [

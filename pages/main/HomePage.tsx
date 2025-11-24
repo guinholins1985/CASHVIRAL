@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { mockVideos } from '../../data/mockData';
-import { HeartIcon, MessageCircleIcon, ShareIcon, UserIcon } from '../../components/icons';
+import { HeartIcon, MessageCircleIcon, ShareIcon, UserIcon, VideoIcon } from '../../components/icons';
 import { Video } from '../../types';
 
 const VideoPlayer: React.FC<{ video: Video; isVisible: boolean }> = ({ video, isVisible }) => {
@@ -57,10 +56,24 @@ const HomePage: React.FC = () => {
     };
     
     return (
-        <div className="h-full w-full overflow-y-scroll snap-y snap-mandatory" onScroll={handleScroll}>
-            {mockVideos.map((video, index) => (
-                <VideoPlayer key={video.id} video={video} isVisible={index === currentVideoIndex} />
-            ))}
+        <div 
+            className="h-full w-full overflow-y-scroll snap-y snap-mandatory" 
+            onScroll={handleScroll}
+        >
+            {mockVideos.length > 0 ? (
+                mockVideos.map((video, index) => (
+                    <VideoPlayer key={video.id} video={video} isVisible={index === currentVideoIndex} />
+                ))
+            ) : (
+                <div className="h-full w-full flex items-center justify-center text-center text-gray-400">
+                    <div>
+                        <VideoIcon className="w-24 h-24 mx-auto mb-4 opacity-50" />
+                        <h2 className="text-2xl font-bold text-white">Nenhum vídeo por aqui...</h2>
+                        <p>O administrador ainda não adicionou nenhum vídeo.</p>
+                        <p>Volte mais tarde!</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

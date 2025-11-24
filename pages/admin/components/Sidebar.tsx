@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AdminPage } from '../AdminLayout';
 import { LayoutDashboardIcon, UsersIcon, VideoIcon, GiftIcon, SettingsIcon } from '../../../components/icons';
@@ -60,7 +59,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
             setCurrentPage={setCurrentPage}
             isSidebarOpen={isOpen}
           />
-          <NavItem
+           <NavItem
             page="videos"
             label="Vídeos"
             icon={<VideoIcon className="w-6 h-6 flex-shrink-0" />}

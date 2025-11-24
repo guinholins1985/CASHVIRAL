@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { ArrowUpRightIcon, UsersIcon, VideoIcon, DollarSignIcon } from '../../components/icons';
+import { ArrowUpRightIcon, UsersIcon, DollarSignIcon, VideoIcon } from '../../components/icons';
 
 const chartData = [
   { name: 'Seg', users: 12 }, { name: 'Ter', users: 19 },
@@ -32,7 +31,7 @@ const DashboardPage: React.FC = () => {
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard title="Total de Usuários" value="1,234" icon={<UsersIcon className="w-6 h-6 text-primary-500" />} change="+12%" changeType="increase" />
-        <StatCard title="Vídeos Assistidos" value="56,789" icon={<VideoIcon className="w-6 h-6 text-primary-500" />} change="+8.5%" changeType="increase" />
+        <StatCard title="Vídeos Assistidos" value="25.4K" icon={<VideoIcon className="w-6 h-6 text-primary-500" />} change="+8%" changeType="increase" />
         <StatCard title="Saldo a Pagar" value="R$ 4,321.00" icon={<DollarSignIcon className="w-6 h-6 text-primary-500" />} change="-2.1%" changeType="decrease" />
         <StatCard title="Usuários Ativos" value="345" icon={<UsersIcon className="w-6 h-6 text-primary-500" />} change="+5%" changeType="increase" />
       </div>
