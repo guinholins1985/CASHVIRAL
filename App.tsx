@@ -7,6 +7,7 @@ import RegisterPage from './pages/auth/RegisterPage';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { ThemeProvider } from './hooks/useTheme';
 import { SettingsProvider } from './hooks/useSettings';
+import { VideosProvider } from './hooks/useVideos';
 
 type AuthView = 'login' | 'register';
 
@@ -38,7 +39,9 @@ const App: React.FC = () => {
     <ThemeProvider>
       <SettingsProvider>
         <AuthProvider>
-          <AppContent />
+          <VideosProvider>
+            <AppContent />
+          </VideosProvider>
         </AuthProvider>
       </SettingsProvider>
     </ThemeProvider>

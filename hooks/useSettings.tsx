@@ -9,18 +9,34 @@ interface SettingsContextType {
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
-// In a real app, this would be persisted to a backend or localStorage.
-// For this simulation, we use a mutable global object to mimic persistence across re-renders.
-let globalSettings = JSON.parse(JSON.stringify(mockSettings));
+const initializeSettings = (): Settings => {
+    try {
+        const storedSettings = localStorage.getItem('cashviral_settings');
+        if (storedSettings) {
+            return JSON.parse(storedSettings);
+        }
+    } catch (error) {
+        console.error("Failed to parse settings from localStorage", error);
+    }
+    // If nothing in localStorage or parsing fails, use initial mock data and save it
+    localStorage.setItem('cashviral_settings', JSON.stringify(mockSettings));
+    return mockSettings;
+};
+
+
+let globalSettings = initializeSettings();
 
 export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [settings, setSettings] = useState<Settings>(globalSettings);
 
   const updateSettings = useCallback((newSettings: Settings) => {
-    // Simulate saving to a persistent store
+    // Save to the persistent store (localStorage)
+    localStorage.setItem('cashviral_settings', JSON.stringify(newSettings));
+    // Update the in-memory copy
     globalSettings = JSON.parse(JSON.stringify(newSettings));
+    // Update the React state to trigger re-renders
     setSettings(globalSettings);
-    console.log("Global settings updated:", globalSettings);
+    console.log("Global settings updated and saved:", globalSettings);
   }, []);
 
   return (

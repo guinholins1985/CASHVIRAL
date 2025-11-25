@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { mockVideos } from '../../data/mockData';
 import { HeartIcon, MessageCircleIcon, ShareIcon, UserIcon, VideoIcon } from '../../components/icons';
 import { Video } from '../../types';
 import AdRenderer from '../../components/AdRenderer';
+import { useVideos } from '../../hooks/useVideos';
 
 const VideoPlayer: React.FC<{ video: Video; isVisible: boolean }> = ({ video, isVisible }) => {
     const [isLiked, setIsLiked] = useState(false);
@@ -47,6 +47,7 @@ const VideoPlayer: React.FC<{ video: Video; isVisible: boolean }> = ({ video, is
 
 const HomePage: React.FC = () => {
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+    const { videos } = useVideos();
 
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop, clientHeight } = event.currentTarget;
@@ -62,8 +63,8 @@ const HomePage: React.FC = () => {
             onScroll={handleScroll}
         >
             <AdRenderer position="home_top_banner" />
-            {mockVideos.length > 0 ? (
-                mockVideos.map((video, index) => (
+            {videos.length > 0 ? (
+                videos.map((video, index) => (
                     <React.Fragment key={video.id}>
                         <VideoPlayer video={video} isVisible={index === currentVideoIndex} />
                         {(index + 1) % 5 === 0 && (

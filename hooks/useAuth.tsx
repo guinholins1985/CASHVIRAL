@@ -13,8 +13,22 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// In a real app, this would be a real user state management, not a mutable global
-let usersDB = [...mockUsers];
+// Initialize usersDB from localStorage or mockData
+const initializeUsers = (): User[] => {
+  try {
+    const storedUsers = localStorage.getItem('cashviral_users');
+    if (storedUsers) {
+      return JSON.parse(storedUsers);
+    }
+  } catch (error) {
+    console.error("Failed to parse users from localStorage", error);
+  }
+  // If nothing in localStorage or parsing fails, use initial mock data and save it
+  localStorage.setItem('cashviral_users', JSON.stringify(mockUsers));
+  return mockUsers;
+};
+
+let usersDB = initializeUsers();
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
@@ -65,6 +79,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAdmin: false
     };
     usersDB.push(newUser);
+    // Persist the updated user list to localStorage
+    localStorage.setItem('cashviral_users', JSON.stringify(usersDB));
+    
     const { password: _, ...userToStore } = newUser;
     setCurrentUser(userToStore);
     return userToStore;

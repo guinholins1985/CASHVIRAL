@@ -1,7 +1,17 @@
-import React from 'react';
-import { mockVideos } from '../../data/mockData';
+import React, { useState } from 'react';
+import { useVideos } from '../../hooks/useVideos';
 
 const VideosPage: React.FC = () => {
+  const { videos, addVideo, deleteVideo } = useVideos();
+  const [newVideoUrl, setNewVideoUrl] = useState('');
+
+  const handleAddVideo = () => {
+    if (newVideoUrl.trim()) {
+      addVideo(newVideoUrl);
+      setNewVideoUrl('');
+    }
+  };
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Gerenciar Vídeos</h1>
@@ -14,8 +24,13 @@ const VideosPage: React.FC = () => {
             type="text"
             placeholder="Cole a URL do vídeo ou playlist (YouTube, Vimeo, etc.)"
             className="flex-grow p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700"
+            value={newVideoUrl}
+            onChange={(e) => setNewVideoUrl(e.target.value)}
           />
-          <button className="bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700">
+          <button 
+            onClick={handleAddVideo}
+            className="bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700"
+          >
             Adicionar
           </button>
         </div>
@@ -36,8 +51,8 @@ const VideosPage: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {mockVideos.length > 0 ? (
-                mockVideos.map(video => (
+              {videos.length > 0 ? (
+                videos.map(video => (
                   <tr key={video.id} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td className="px-6 py-4">
                       <img src={video.thumbnail} alt={video.title} className="w-24 h-14 object-cover rounded-md" />
@@ -48,7 +63,12 @@ const VideosPage: React.FC = () => {
                     <td className="px-6 py-4">{video.views.toLocaleString()}</td>
                     <td className="px-6 py-4">{video.likes.toLocaleString()}</td>
                     <td className="px-6 py-4">
-                      <button className="font-medium text-red-600 dark:text-red-500 hover:underline">Excluir</button>
+                      <button 
+                        onClick={() => deleteVideo(video.id)}
+                        className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                      >
+                        Excluir
+                      </button>
                     </td>
                   </tr>
                 ))

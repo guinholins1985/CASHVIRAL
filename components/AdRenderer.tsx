@@ -21,7 +21,7 @@ const AdRenderer: React.FC<AdRendererProps> = ({ position }) => {
       // This logic finds them and re-creates them so they run.
       // This is necessary for most ad networks, including AdSense, in SPAs.
       const scripts = Array.from(container.getElementsByTagName('script'));
-      // FIX: Add explicit type for `oldScript` to prevent it from being inferred as `unknown`.
+      // FIX: Explicitly type `oldScript` to prevent it from being inferred as `unknown` or `any` in stricter TypeScript environments.
       scripts.forEach((oldScript: HTMLScriptElement) => {
         const newScript = document.createElement('script');
         Array.from(oldScript.attributes).forEach(attr => {
