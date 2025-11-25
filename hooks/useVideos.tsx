@@ -10,7 +10,6 @@ interface VideosContextType {
 
 const VideosContext = createContext<VideosContextType | undefined>(undefined);
 
-// Initialize videosDB from localStorage or initial mockData
 const initializeVideos = (): Video[] => {
     try {
         const storedVideos = localStorage.getItem('cashviral_videos');
@@ -20,19 +19,14 @@ const initializeVideos = (): Video[] => {
     } catch (error) {
         console.error("Failed to parse videos from localStorage", error);
     }
-    // If nothing in localStorage, use initial data and save it
     localStorage.setItem('cashviral_videos', JSON.stringify(initialVideos));
     return initialVideos;
 };
 
-let videosDB = initializeVideos();
-
 export const VideosProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [videos, setVideos] = useState<Video[]>(videosDB);
+  const [videos, setVideos] = useState<Video[]>(initializeVideos);
 
   const addVideo = useCallback((url: string) => {
-    // In a real app, you would fetch video details from the URL (e.g., using YouTube API)
-    // Here, we'll just create a mock video object.
     const newVideo: Video = {
       id: `v${Date.now()}`,
       title: `Novo Vídeo Adicionado`,
@@ -44,15 +38,20 @@ export const VideosProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       uploader: "Admin",
       uploaderAvatar: 'https://picsum.photos/seed/admin/100',
     };
-    videosDB = [newVideo, ...videosDB];
-    localStorage.setItem('cashviral_videos', JSON.stringify(videosDB));
-    setVideos([...videosDB]); // Use spread to ensure re-render
+    
+    setVideos(prevVideos => {
+        const updatedVideos = [newVideo, ...prevVideos];
+        localStorage.setItem('cashviral_videos', JSON.stringify(updatedVideos));
+        return updatedVideos;
+    });
   }, []);
 
   const deleteVideo = useCallback((id: string) => {
-    videosDB = videosDB.filter(video => video.id !== id);
-    localStorage.setItem('cashviral_videos', JSON.stringify(videosDB));
-    setVideos([...videosDB]); // Use spread to ensure re-render
+    setVideos(prevVideos => {
+        const updatedVideos = prevVideos.filter(video => video.id !== id);
+        localStorage.setItem('cashviral_videos', JSON.stringify(updatedVideos));
+        return updatedVideos;
+    });
   }, []);
 
   return (
