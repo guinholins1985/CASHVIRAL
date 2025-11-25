@@ -1,4 +1,4 @@
-import { User, Video, Transaction, DailyTask, WithdrawalRequest } from '../types';
+import { User, Video, Transaction, DailyTask, WithdrawalRequest, Settings } from '../types';
 
 export const mockUsers: User[] = [
   { id: 'u0', name: 'Admin User', username: 'ad', email: 'admin@cashviral.com', password: 'a12', avatar: 'https://picsum.photos/seed/admin/100', balance: 9999, status: 'active', joinDate: '2023-01-01', isAdmin: true },
@@ -31,3 +31,43 @@ export const mockWithdrawalRequests: WithdrawalRequest[] = [
   { id: 'w2', userId: 'u4', userName: 'Diana', amount: 100.00, method: 'PIX', pixKey: '123.456.789-00', date: '2023-11-19T18:00:00Z', status: 'approved' },
   { id: 'w3', userId: 'u2', userName: 'Bob', amount: 25.00, method: 'PagBank', pixKey: '(11) 98765-4321', date: '2023-11-18T12:00:00Z', status: 'rejected' },
 ];
+
+export const mockSettings: Settings = {
+  general: {
+    appName: "CASHVIRAL",
+    appLogo: null,
+    privacyPolicyUrl: "https://seu-site.com/politica-de-privacidade",
+  },
+  rewards: {
+    rewardPerVideo: 0.10,
+    minWatchTime: 30,
+    dailyLoginBonus: 0.50,
+    inviteBonus: 5.00,
+    minWithdrawal: 20.00,
+    dailyWithdrawalLimit: 100.00,
+  },
+  monetization: {
+    paymentGateways: {
+      mercadoPago: { enabled: true, apiKey: "" },
+      pagBank: { enabled: true, apiKey: "" },
+      stripe: { enabled: false, apiKey: "" },
+      paypal: { enabled: false, apiKey: "" },
+    },
+    adsense: {
+      enabled: false,
+      publisherId: "",
+    },
+    customAds: [],
+  },
+  api: {
+    youtubeApiKey: "",
+    geminiApiKey: "",
+  },
+  security: {
+    maintenanceMode: {
+      enabled: false,
+      message: "Voltamos em breve com novidades!",
+    },
+    admin2FA: false,
+  },
+};

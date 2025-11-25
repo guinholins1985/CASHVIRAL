@@ -6,6 +6,7 @@ import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { ThemeProvider } from './hooks/useTheme';
+import { SettingsProvider } from './hooks/useSettings';
 
 type AuthView = 'login' | 'register';
 
@@ -35,9 +36,11 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <SettingsProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </SettingsProvider>
     </ThemeProvider>
   );
 };

@@ -2,6 +2,7 @@
 import React from 'react';
 import { mockDailyTasks } from '../../data/mockData';
 import { DailyTask } from '../../types';
+import AdRenderer from '../../components/AdRenderer';
 
 const TaskCard: React.FC<{ task: DailyTask }> = ({ task }) => (
   <div className="bg-gray-800 p-4 rounded-lg mb-4">
@@ -41,6 +42,8 @@ const EarnPage: React.FC = () => {
         <h1 className="text-3xl font-bold">Ganhe Mais</h1>
         <p className="text-gray-400">Complete tarefas e convide amigos para aumentar seus ganhos.</p>
       </header>
+
+      <AdRenderer position="earn_page_banner" />
       
       <div className="bg-yellow-400 text-black p-6 rounded-xl text-center my-6">
         <h2 className="text-2xl font-bold">Convide um Amigo</h2>

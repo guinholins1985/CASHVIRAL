@@ -1,4 +1,5 @@
 
+
 export interface User {
   id: string;
   name: string;
@@ -52,4 +53,55 @@ export interface WithdrawalRequest {
   pixKey: string;
   date: string;
   status: 'pending' | 'approved' | 'rejected';
+}
+
+// Settings Page Types
+export type AdPosition = 'home_top_banner' | 'video_feed_interstitial' | 'earn_page_banner' | 'profile_banner' | 'popup';
+
+export interface Ad {
+  id: number;
+  position: AdPosition;
+  code: string;
+  enabled: boolean;
+}
+
+export interface Settings {
+  general: {
+    appName: string;
+    appLogo: string | null;
+    privacyPolicyUrl: string;
+  };
+  rewards: {
+    rewardPerVideo: number;
+    minWatchTime: number;
+    dailyLoginBonus: number;
+    inviteBonus: number;
+    minWithdrawal: number;
+    dailyWithdrawalLimit: number;
+  };
+  monetization: {
+    paymentGateways: {
+      mercadoPago: { enabled: boolean; apiKey: string };
+      pagBank: { enabled: boolean; apiKey: string };
+      stripe: { enabled: boolean; apiKey: string };
+      paypal: { enabled: boolean; apiKey: string };
+    };
+    adsense: {
+      enabled: boolean;
+      publisherId: string;
+    };
+    customAds: Ad[];
+  };
+  api: {
+    youtubeApiKey: string;
+    geminiApiKey: string;
+
+  };
+  security: {
+    maintenanceMode: {
+      enabled: boolean;
+      message: string;
+    };
+    admin2FA: boolean;
+  };
 }

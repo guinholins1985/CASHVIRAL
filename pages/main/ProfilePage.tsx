@@ -3,6 +3,7 @@ import React from 'react';
 import { mockTransactions } from '../../data/mockData';
 import { Transaction } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
+import AdRenderer from '../../components/AdRenderer';
 
 const TransactionItem: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
     const isCredit = transaction.amount > 0;
@@ -35,6 +36,8 @@ const ProfilePage: React.FC = () => {
         <p className="text-gray-400">@{currentUser.username}</p>
         <p className="text-gray-400 text-sm">{currentUser.email}</p>
       </div>
+
+      <AdRenderer position="profile_banner" />
 
       <div className="my-8 bg-gray-800 p-6 rounded-xl text-center">
         <p className="text-gray-300 text-sm">Saldo Atual</p>

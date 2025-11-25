@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { mockVideos } from '../../data/mockData';
 import { HeartIcon, MessageCircleIcon, ShareIcon, UserIcon, VideoIcon } from '../../components/icons';
 import { Video } from '../../types';
+import AdRenderer from '../../components/AdRenderer';
 
 const VideoPlayer: React.FC<{ video: Video; isVisible: boolean }> = ({ video, isVisible }) => {
     const [isLiked, setIsLiked] = useState(false);
@@ -60,9 +61,17 @@ const HomePage: React.FC = () => {
             className="h-full w-full overflow-y-scroll snap-y snap-mandatory" 
             onScroll={handleScroll}
         >
+            <AdRenderer position="home_top_banner" />
             {mockVideos.length > 0 ? (
                 mockVideos.map((video, index) => (
-                    <VideoPlayer key={video.id} video={video} isVisible={index === currentVideoIndex} />
+                    <React.Fragment key={video.id}>
+                        <VideoPlayer video={video} isVisible={index === currentVideoIndex} />
+                        {(index + 1) % 5 === 0 && (
+                            <div className="h-full w-full snap-start flex-shrink-0 bg-black flex items-center justify-center p-4">
+                               <AdRenderer position="video_feed_interstitial" />
+                            </div>
+                        )}
+                    </React.Fragment>
                 ))
             ) : (
                 <div className="h-full w-full flex items-center justify-center text-center text-gray-400">
