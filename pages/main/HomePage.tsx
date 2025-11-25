@@ -1,15 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import { HeartIcon, MessageCircleIcon, ShareIcon, VideoIcon, VolumeXIcon, Volume2Icon, PlayIcon } from '../../components/icons';
-import { Video } from '../../types';
+import { Video, AdPosition } from '../../types';
 import AdRenderer from '../../components/AdRenderer';
 import { useVideos } from '../../hooks/useVideos';
 
-const VideoPlayer: React.FC<{ video: Video; isVisible: boolean }> = ({ video, isVisible }) => {
+interface VideoPlayerProps {
+    video: Video;
+    isVisible: boolean;
+    onVideoEnded: () => void;
+}
+
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, isVisible, onVideoEnded }) => {
     const [isLiked, setIsLiked] = useState(false);
     const [isPlaying, setIsPlaying] = useState(true);
     const [isMuted, setIsMuted] = useState(true);
     const [showPlayIcon, setShowPlayIcon] = useState(false);
+    const [progress, setProgress] = useState(0);
     const playerRef = useRef<ReactPlayer>(null);
 
     const handleTogglePlay = () => {
@@ -20,6 +27,26 @@ const VideoPlayer: React.FC<{ video: Video; isVisible: boolean }> = ({ video, is
         }
     };
     
+    // The "stop" function pauses the video and seeks to the beginning.
+    // It can be attached to a UI element if needed in the future.
+    const handleStop = () => {
+        setIsPlaying(false);
+        playerRef.current?.seekTo(0);
+    };
+
+    const handleProgress = (state: { played: number }) => {
+        if(isVisible) {
+            setProgress(state.played);
+        }
+    };
+
+    useEffect(() => {
+        // Reset progress when video is no longer visible
+        if (!isVisible) {
+            setProgress(0);
+        }
+    }, [isVisible]);
+
     return (
         <div className="relative h-full w-full snap-start flex-shrink-0 bg-black" onClick={handleTogglePlay}>
             <ReactPlayer
@@ -27,11 +54,13 @@ const VideoPlayer: React.FC<{ video: Video; isVisible: boolean }> = ({ video, is
                 url={video.url}
                 playing={isVisible && isPlaying}
                 muted={isMuted}
-                loop={true}
+                loop={false} // Must be false for onEnded to work
                 width="100%"
                 height="100%"
                 style={{ objectFit: 'cover' }}
                 playsinline // Important for mobile browsers
+                onEnded={onVideoEnded} // Triggers auto-scroll
+                onProgress={handleProgress} // Updates the real progress bar
             />
             
             {showPlayIcon && (
@@ -70,7 +99,10 @@ const VideoPlayer: React.FC<{ video: Video; isVisible: boolean }> = ({ video, is
             </div>
             
             <div className="absolute bottom-4 left-4 h-1.5 bg-white/20 rounded-full w-2/3 pointer-events-none">
-                <div className="h-full bg-yellow-400 rounded-full" style={{width: isVisible ? '100%' : '0%', transition: isVisible ? 'width 30s linear' : 'none'}}></div>
+                <div 
+                    className="h-full bg-yellow-400 rounded-full" 
+                    style={{width: `${progress * 100}%`, transition: 'width 0.1s linear'}}>
+                </div>
             </div>
         </div>
     );
@@ -78,34 +110,64 @@ const VideoPlayer: React.FC<{ video: Video; isVisible: boolean }> = ({ video, is
 
 
 const HomePage: React.FC = () => {
-    const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+    const [currentFeedIndex, setCurrentFeedIndex] = useState(0);
     const { videos } = useVideos();
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    // Create a unified feed with videos and ads for robust indexing
+    const feedItems = videos.reduce<(Video | { type: 'ad'; position: AdPosition })[]>((acc, video, index) => {
+        acc.push(video);
+        if ((index + 1) % 5 === 0) {
+            acc.push({ type: 'ad', position: 'video_feed_interstitial' });
+        }
+        return acc;
+    }, []);
 
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop, clientHeight } = event.currentTarget;
         const index = Math.round(scrollTop / clientHeight);
-        if(index !== currentVideoIndex){
-            setCurrentVideoIndex(index);
+        if(index !== currentFeedIndex){
+            setCurrentFeedIndex(index);
         }
     };
     
+    const handleVideoEnded = (endedItemIndex: number) => {
+        if (scrollContainerRef.current && endedItemIndex < feedItems.length - 1) {
+            const container = scrollContainerRef.current;
+            const nextItemPosition = (endedItemIndex + 1) * container.clientHeight;
+            container.scrollTo({
+                top: nextItemPosition,
+                behavior: 'smooth'
+            });
+        }
+    };
+
     return (
         <div 
+            ref={scrollContainerRef}
             className="h-full w-full overflow-y-scroll snap-y snap-mandatory" 
             onScroll={handleScroll}
         >
             <AdRenderer position="home_top_banner" />
-            {videos.length > 0 ? (
-                videos.map((video, index) => (
-                    <React.Fragment key={video.id}>
-                        <VideoPlayer video={video} isVisible={index === currentVideoIndex} />
-                        {(index + 1) % 5 === 0 && (
-                            <div className="h-full w-full snap-start flex-shrink-0 bg-black flex items-center justify-center p-4">
-                               <AdRenderer position="video_feed_interstitial" />
+            {feedItems.length > 0 ? (
+                feedItems.map((item, index) => {
+                    if ('url' in item) { // It's a Video
+                        return (
+                             <VideoPlayer 
+                                key={item.id} 
+                                video={item} 
+                                isVisible={index === currentFeedIndex} 
+                                onVideoEnded={() => handleVideoEnded(index)} 
+                            />
+                        )
+                    } else { // It's an Ad
+                        return (
+                            <div key={`ad-${index}`} className="h-full w-full snap-start flex-shrink-0 bg-black flex items-center justify-center p-4">
+                               <AdRenderer position={item.position} />
                             </div>
-                        )}
-                    </React.Fragment>
-                ))
+                        )
+                    }
+                })
             ) : (
                 <div className="h-full w-full flex items-center justify-center text-center text-gray-400">
                     <div>
