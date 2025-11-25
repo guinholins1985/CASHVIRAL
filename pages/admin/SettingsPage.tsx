@@ -38,20 +38,34 @@ const SettingsPage: React.FC = () => {
   };
   
   const handleNestedInputChange = (tab: keyof Settings, group: string, field: string, value: any) => {
-     setDraftSettings(prev => {
-        const newSettings = {...prev};
-        (newSettings[tab] as any)[group][field] = value;
-        return newSettings;
-    });
+    // FIX: Use immutable pattern for nested state updates to avoid bugs.
+    setDraftSettings(prev => ({
+        ...prev,
+        [tab]: {
+            ...(prev[tab] as any),
+            [group]: {
+                ...(prev[tab] as any)[group],
+                [field]: value,
+            },
+        },
+    }));
   };
   
   const handleGatewayChange = (key: keyof Settings['monetization']['paymentGateways'], field: 'enabled' | 'apiKey', value: string | boolean) => {
-    setDraftSettings(prev => {
-        const newSettings = {...prev};
-        const gateway = newSettings.monetization.paymentGateways[key];
-        (gateway as any)[field] = value;
-        return newSettings;
-    });
+    // FIX: Use immutable pattern for nested state updates to avoid bugs.
+    setDraftSettings(prev => ({
+        ...prev,
+        monetization: {
+            ...prev.monetization,
+            paymentGateways: {
+                ...prev.monetization.paymentGateways,
+                [key]: {
+                    ...prev.monetization.paymentGateways[key],
+                    [field]: value
+                }
+            }
+        }
+    }));
   };
 
   const handleLogoChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -214,8 +228,8 @@ const SettingsPage: React.FC = () => {
               <div className="p-4 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-bold mb-4 flex items-center"><CreditCardIcon className="w-6 h-6 mr-2 text-primary-500" />Gateways de Pagamento</h2>
                 <div className="space-y-4">
-                    {/* Fix: Iterate over payment gateways in a type-safe way using Object.keys with a type assertion. */}
-                    {(Object.keys(draftSettings.monetization.paymentGateways) as Array<keyof typeof draftSettings.monetization.paymentGateways>).map((key) => {
+                    {/* FIX: Correctly cast the result of Object.keys to iterate over payment gateways in a type-safe manner. */}
+                    {(Object.keys(draftSettings.monetization.paymentGateways) as (keyof typeof draftSettings.monetization.paymentGateways)[]).map((key) => {
                         const gateway = draftSettings.monetization.paymentGateways[key];
                         return (
                          <div key={key} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md">
