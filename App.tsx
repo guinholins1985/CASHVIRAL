@@ -8,6 +8,8 @@ import { AuthProvider, useAuth } from './hooks/useAuth';
 import { ThemeProvider } from './hooks/useTheme';
 import { SettingsProvider } from './hooks/useSettings';
 import { VideosProvider } from './hooks/useVideos';
+import { UsersProvider } from './hooks/useUsers';
+import { WithdrawalsProvider } from './hooks/useWithdrawals';
 
 type AuthView = 'login' | 'register';
 
@@ -38,11 +40,15 @@ const App: React.FC = () => {
   return (
     <ThemeProvider>
       <SettingsProvider>
-        <AuthProvider>
-          <VideosProvider>
-            <AppContent />
-          </VideosProvider>
-        </AuthProvider>
+        <UsersProvider>
+          <AuthProvider>
+            <VideosProvider>
+              <WithdrawalsProvider>
+                <AppContent />
+              </WithdrawalsProvider>
+            </VideosProvider>
+          </AuthProvider>
+        </UsersProvider>
       </SettingsProvider>
     </ThemeProvider>
   );

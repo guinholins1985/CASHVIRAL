@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { User } from '../types';
-import { mockUsers } from '../data/mockData';
+import { useUsers } from './useUsers';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -13,28 +13,18 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Initialize usersDB from localStorage or mockData
-const initializeUsers = (): User[] => {
-  try {
-    const storedUsers = localStorage.getItem('cashviral_users');
-    if (storedUsers) {
-      return JSON.parse(storedUsers);
-    }
-  } catch (error) {
-    console.error("Failed to parse users from localStorage", error);
-  }
-  // If nothing in localStorage or parsing fails, use initial mock data and save it
-  localStorage.setItem('cashviral_users', JSON.stringify(mockUsers));
-  return mockUsers;
-};
-
-let usersDB = initializeUsers();
-
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    const storedUser = sessionStorage.getItem('currentUser');
-    return storedUser ? JSON.parse(storedUser) : null;
+    try {
+      const storedUser = sessionStorage.getItem('currentUser');
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch (e) {
+      console.error("Could not parse user from session storage", e);
+      return null;
+    }
   });
+
+  const { users, addUser } = useUsers();
   
   const isAuthenticated = !!currentUser;
   const isAdmin = currentUser?.isAdmin || false;
@@ -47,11 +37,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, [currentUser]);
 
-
   const login = async (username: string, password: string): Promise<User | null> => {
-    const user = usersDB.find(u => u.username === username && u.password === password);
+    const user = users.find(u => u.username === username && u.password === password);
     if (user) {
-      const { password: _, ...userToStore } = user; // Don't store password
+      const { password: _, ...userToStore } = user; // Don't store password in session
       setCurrentUser(userToStore);
       return userToStore;
     }
@@ -63,24 +52,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const register = async (name: string, username: string, email: string, password: string): Promise<User | null> => {
-    if (usersDB.some(u => u.username === username || u.email === email)) {
+    if (users.some(u => u.username === username || u.email === email)) {
         return null; // User already exists
     }
     const newUser: User = {
-        id: `u${usersDB.length + 1}`,
+        id: `u${Date.now()}`,
         name,
         username,
         email,
         password,
-        avatar: `https://picsum.photos/seed/${username}/100`,
+        avatar: `https://i.pravatar.cc/150?u=${username}`,
         balance: 0,
         status: 'active',
         joinDate: new Date().toISOString().split('T')[0],
         isAdmin: false
     };
-    usersDB.push(newUser);
-    // Persist the updated user list to localStorage
-    localStorage.setItem('cashviral_users', JSON.stringify(usersDB));
+    
+    addUser(newUser);
     
     const { password: _, ...userToStore } = newUser;
     setCurrentUser(userToStore);

@@ -1,10 +1,11 @@
 
-import React from 'react';
-import { mockUsers } from '../../data/mockData';
+
+import React, { useState } from 'react';
+import { useUsers } from '../../hooks/useUsers';
 import { User } from '../../types';
 
 const StatusBadge: React.FC<{ status: User['status'] }> = ({ status }) => {
-  const baseClasses = 'px-2 py-1 text-xs font-semibold rounded-full';
+  const baseClasses = 'px-2 py-1 text-xs font-semibold rounded-full capitalize';
   const statusClasses = {
     active: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
     inactive: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
@@ -14,6 +15,24 @@ const StatusBadge: React.FC<{ status: User['status'] }> = ({ status }) => {
 };
 
 const UsersPage: React.FC = () => {
+  const { users, updateUserStatus } = useUsers();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleStatusChange = (user: User) => {
+    const newStatus = user.status === 'banned' ? 'active' : 'banned';
+    const actionText = newStatus === 'banned' ? 'banir' : 'reativar';
+    if (window.confirm(`Você tem certeza que deseja ${actionText} o usuário ${user.name}?`)) {
+      updateUserStatus(user.id, newStatus);
+    }
+  };
+
+  const filteredUsers = users.filter(user => 
+    !user.isAdmin && (
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Gerenciar Usuários</h1>
@@ -21,7 +40,9 @@ const UsersPage: React.FC = () => {
         <div className="flex justify-between items-center mb-4">
           <input
             type="text"
-            placeholder="Buscar usuário..."
+            placeholder="Buscar usuário por nome ou email..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full max-w-xs p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700"
           />
         </div>
@@ -37,7 +58,7 @@ const UsersPage: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {mockUsers.map(user => (
+              {filteredUsers.map(user => (
                 <tr key={user.id} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center">
                     <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full mr-3" />
@@ -50,7 +71,12 @@ const UsersPage: React.FC = () => {
                   </td>
                   <td className="px-6 py-4">
                     <button className="font-medium text-primary-600 dark:text-primary-500 hover:underline">Editar</button>
-                    <button className="font-medium text-red-600 dark:text-red-500 hover:underline ml-4">Banir</button>
+                    <button 
+                      onClick={() => handleStatusChange(user)}
+                      className={`font-medium ml-4 ${user.status === 'banned' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500'} hover:underline`}
+                    >
+                      {user.status === 'banned' ? 'Reativar' : 'Banir'}
+                    </button>
                   </td>
                 </tr>
               ))}
