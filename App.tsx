@@ -2,16 +2,13 @@ import React, { useState, useEffect } from 'react';
 import MainLayout from './pages/main/MainLayout';
 import AdminLayout from './pages/admin/AdminLayout';
 import LandingPage from './pages/main/LandingPage';
-import LoginPage from './pages/auth/LoginPage';
-import RegisterPage from './pages/auth/RegisterPage';
+import AuthPage from './pages/auth/AuthPage';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { ThemeProvider } from './hooks/useTheme';
 import { SettingsProvider, useSettings } from './hooks/useSettings';
 import { VideosProvider } from './hooks/useVideos';
 import { UsersProvider } from './hooks/useUsers';
 import { WithdrawalsProvider } from './hooks/useWithdrawals';
-
-type AuthView = 'login' | 'register';
 
 const AdSenseLoader: React.FC = () => {
   const { settings } = useSettings();
@@ -25,27 +22,21 @@ const AdSenseLoader: React.FC = () => {
       script.crossOrigin = 'anonymous';
       script.id = 'adsense-script';
 
-      // Avoid adding duplicate scripts
       if (!document.getElementById('adsense-script')) {
         document.head.appendChild(script);
       }
     }
   }, [enabled, publisherId]);
 
-  return null; // This component doesn't render anything
+  return null;
 };
-
 
 const AppContent: React.FC = () => {
   const { isAuthenticated, isAdmin } = useAuth();
-  const [authView, setAuthView] = useState<AuthView>('login');
   const [landingPageSeen, setLandingPageSeen] = useState(false);
 
   if (!isAuthenticated) {
-    if (authView === 'login') {
-      return <LoginPage onSwitchToRegister={() => setAuthView('register')} />;
-    }
-    return <RegisterPage onSwitchToLogin={() => setAuthView('login')} />;
+    return <AuthPage />;
   }
 
   if (isAdmin) {

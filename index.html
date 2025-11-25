@@ -18,7 +18,18 @@
               sans: ['Poppins', 'sans-serif'],
             },
             colors: {
-              primary: {"50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","300":"#93c5fd","400":"#60a5fa","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8","800":"#1e40af","900":"#1e3a8a","950":"#172554"}
+              "obsidian": "#0B0B0F",
+              "neon-green": {
+                "DEFAULT": "#39FF14",
+                "light": "#8AFF8A",
+                "dark": "#2E8B57"
+              },
+              "gold": {
+                "DEFAULT": "#FFD700",
+                "light": "#FFEE75",
+                "dark": "#B8860B"
+              },
+              primary: {"50":"#f0fdf4","100":"#dcfce7","200":"#bbf7d0","300":"#86efac","400":"#4ade80","500":"#22c55e","600":"#16a34a","700":"#15803d","800":"#166534","900":"#14532d","950":"#052e16"}
             }
           }
         }
@@ -39,26 +50,6 @@
   body {
     font-family: 'Poppins', sans-serif;
   }
-  .animate-blob {
-      animation: blob 7s infinite;
-  }
-  .animation-delay-4000 {
-      animation-delay: -4s;
-  }
-  @keyframes blob {
-      0% {
-          transform: translate(0px, 0px) scale(1);
-      }
-      33% {
-          transform: translate(30px, -50px) scale(1.1);
-      }
-      66% {
-          transform: translate(-20px, 20px) scale(0.9);
-      }
-      100% {
-          transform: translate(0px, 0px) scale(1);
-      }
-  }
   .animate-ping-once {
     animation: ping 0.8s cubic-bezier(0, 0, 0.2, 1);
   }
@@ -68,9 +59,82 @@
       opacity: 0;
     }
   }
+
+  /* Particle background styles */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: #39FF14;
+    opacity: 0;
+    animation: rise 10s infinite linear;
+  }
+
+  @keyframes rise {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.8;
+    }
+    90% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-100vh);
+      opacity: 0;
+    }
+  }
+  
+  /* Auth Form Flip Animation */
+  .auth-container {
+    perspective: 1000px;
+  }
+  .auth-flipper {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s;
+  }
+  .auth-flipper.is-flipped {
+    transform: rotateY(180deg);
+  }
+  .auth-front, .auth-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    top: 0;
+    left: 0;
+  }
+  .auth-back {
+    transform: rotateY(180deg);
+  }
+
+  /* Shine effect */
+  .shine-button {
+    position: relative;
+    overflow: hidden;
+  }
+  .shine-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: all 0.6s;
+  }
+  .shine-button:hover::before {
+    left: 100%;
+  }
+
+  .glow-title {
+    text-shadow: 0 0 8px rgba(57, 255, 20, 0.3), 0 0 20px rgba(57, 255, 20, 0.2);
+  }
 </style>
 </head>
-  <body class="bg-gray-100 dark:bg-gray-900">
+  <body class="bg-obsidian text-white">
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
   </body>

@@ -214,16 +214,16 @@ const SettingsPage: React.FC = () => {
               <div className="p-4 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-bold mb-4 flex items-center"><CreditCardIcon className="w-6 h-6 mr-2 text-primary-500" />Gateways de Pagamento</h2>
                 <div className="space-y-4">
-                    {/* Fix: Iterate over payment gateways in a type-safe way using Object.entries. */}
-                    {Object.entries(draftSettings.monetization.paymentGateways).map(([key, gateway]) => {
-                        const typedKey = key as keyof typeof draftSettings.monetization.paymentGateways;
+                    {/* Fix: Iterate over payment gateways in a type-safe way using Object.keys with a type assertion. */}
+                    {(Object.keys(draftSettings.monetization.paymentGateways) as Array<keyof typeof draftSettings.monetization.paymentGateways>).map((key) => {
+                        const gateway = draftSettings.monetization.paymentGateways[key];
                         return (
                          <div key={key} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md">
                             <div className="flex items-center mb-2 sm:mb-0">
-                                <ToggleSwitch enabled={gateway.enabled} onChange={(val) => handleGatewayChange(typedKey, 'enabled', val)} />
+                                <ToggleSwitch enabled={gateway.enabled} onChange={(val) => handleGatewayChange(key, 'enabled', val)} />
                                 <span className="ml-3 font-semibold">{key.charAt(0).toUpperCase() + key.slice(1).replace('pag', 'Pag')}</span>
                             </div>
-                            <input type="password" placeholder={`Chave API do ${key}`} value={gateway.apiKey} onChange={(e) => handleGatewayChange(typedKey, 'apiKey', e.target.value)} className="w-full sm:w-1/2 p-2 text-sm border rounded-md dark:bg-gray-900 dark:border-gray-600" />
+                            <input type="password" placeholder={`Chave API do ${key}`} value={gateway.apiKey} onChange={(e) => handleGatewayChange(key, 'apiKey', e.target.value)} className="w-full sm:w-1/2 p-2 text-sm border rounded-md dark:bg-gray-900 dark:border-gray-600" />
                         </div>
                     )})}
                 </div>

@@ -1,10 +1,17 @@
-
-
 import React from 'react';
 
 type IconProps = {
   className?: string;
 };
+
+export const LogoIcon: React.FC<IconProps> = ({ className }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M7.5 12C7.5 14.4853 9.51472 16.5 12 16.5C14.4853 16.5 16.5 14.4853 16.5 12C16.5 9.51472 14.4853 7.5 12 7.5C9.51472 7.5 7.5 9.51472 7.5 12Z" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M12 14V10M14 12H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+);
+
 
 export const HomeIcon: React.FC<IconProps> = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -170,4 +177,32 @@ export const Volume2Icon: React.FC<IconProps> = ({ className }) => (
     <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
     <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
   </svg>
+);
+
+export const MailIcon: React.FC<IconProps> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
+    <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+    <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+  </svg>
+);
+
+export const LockClosedIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
+        <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
+    </svg>
+);
+
+export const GoogleIcon: React.FC<IconProps> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} width="24" height="24" viewBox="0 0 48 48">
+    <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"></path>
+    <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"></path>
+    <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.222 0-9.618-3.317-11.28-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"></path>
+    <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C42.012 36.426 44 30.638 44 24c0-1.341-.138-2.65-.389-3.917z"></path>
+  </svg>
+);
+
+export const AppleIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} width="24" height="24" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M15.228.618A4.475 4.475 0 0 0 12.03 2.5a4.443 4.443 0 0 0-1.233 3.224A4.2 4.2 0 0 0 12.03 9a4.237 4.237 0 0 0 3.198-1.718a4.34 4.34 0 0 0 1.25-3.21a4.33 4.33 0 0 0-1.25-3.21ZM12.03 8.381a3.593 3.593 0 0 1-2.618-1.066a3.579 3.579 0 0 1 0-5.116a3.61 3.61 0 0 1 5.222.014a3.579 3.579 0 0 1 0 5.116a3.593 3.593 0 0 1-2.604 1.052Zm6.48-2.645a.513.513 0 0 0 .5-.514a.51.51 0 0 0-.5-.5h-1.55a.51.51 0 0 0-.5.5a.513.513 0 0 0 .5.514Zm-12.457 0a.51.51 0 0 0 .5-.514a.51.51 0 0 0-.5-.5H4.004a.51.51 0 0 0-.5.5a.51.51 0 0 0 .5.514Z M19.4 10.7a6.513 6.513 0 0 0-4.485 2.155a6.57 6.57 0 0 0-5.748 0A6.513 6.513 0 0 0 4.6 10.7a6.536 6.536 0 0 0-2.31 5.183A6.536 6.536 0 0 0 4.6 21.06a6.513 6.513 0 0 0 4.485-2.155a6.57 6.57 0 0 0 5.748 0a6.513 6.513 0 0 0 4.485 2.155a6.536 6.536 0 0 0 2.31-5.183a6.536 6.536 0 0 0-2.31-5.176Zm-1.285 9.333a5.522 5.522 0 0 1-3.6-1.74a7.55 7.55 0 0 1-5.02 0a5.522 5.522 0 0 1-3.6 1.74a5.51 5.51 0 0 1-1.285-10.877a5.522 5.522 0 0 1 3.6 1.74a7.55 7.55 0 0 1 5.02 0a5.522 5.522 0 0 1 3.6-1.74a5.51 5.51 0 0 1 1.285 10.877Z" />
+    </svg>
 );

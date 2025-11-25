@@ -1,19 +1,51 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { DollarSignIcon, VideoIcon, GiftIcon } from '../../components/icons';
 
 interface LandingPageProps {
     onEnter: () => void;
 }
 
-const FloatingIcon: React.FC<{ icon: React.ReactNode, className: string }> = ({ icon, className }) => {
-    return (
-        <div className={`absolute text-white/50 ${className}`}>
-            <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                {icon}
-            </div>
+const ParticleBackground: React.FC = () => {
+    useEffect(() => {
+        const container = document.getElementById('particle-container');
+        if (!container) return;
+
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 5 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 10}s`;
+            particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+            container.appendChild(particle);
+        }
+    }, []);
+
+    return <div id="particle-container" className="absolute inset-0 z-0 overflow-hidden"></div>;
+};
+
+const Torus: React.FC<{ style: React.CSSProperties }> = ({ style }) => (
+    <div style={style} className="relative w-64 h-64">
+        <div className="absolute inset-0 rounded-full"
+            style={{
+                transform: 'rotateX(75deg)',
+                transformStyle: 'preserve-3d',
+                background: 'radial-gradient(circle, transparent 45%, #39FF14 50%, #2E8B57 60%, transparent 70%)',
+                boxShadow: 'inset 0 0 20px rgba(57, 255, 20, 0.5), 0 0 30px rgba(57, 255, 20, 0.3)',
+                animation: 'spin 20s linear infinite'
+            }}>
         </div>
-    );
-}
+         <div className="absolute inset-0 rounded-full"
+            style={{
+                transform: 'rotateX(75deg) translateZ(2px)',
+                transformStyle: 'preserve-3d',
+                background: 'radial-gradient(circle, transparent 45%, #39FF14 50%, #2E8B57 60%, transparent 70%)',
+                 filter: 'blur(5px)'
+            }}>
+        </div>
+    </div>
+);
 
 
 const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
@@ -22,16 +54,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
-            if (!containerRef.current) return;
-
-            const { clientX, clientY } = e;
-            const { width, height, left, top } = containerRef.current.getBoundingClientRect();
+            const { clientX, clientY, currentTarget } = e;
+            if(!(currentTarget instanceof Window)) return;
+            const { innerWidth, innerHeight } = currentTarget;
             
-            const x = clientX - left;
-            const y = clientY - top;
-            
-            const rotateX = -((y / height) - 0.5) * 20; // max rotation 10deg
-            const rotateY = ((x / width) - 0.5) * 20; // max rotation 10deg
+            const rotateX = -((clientY / innerHeight) - 0.5) * 30; 
+            const rotateY = ((clientX / innerWidth) - 0.5) * 30;
             
             setStyle({
                 transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1, 1, 1)`,
@@ -47,47 +75,35 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
         }
 
         window.addEventListener('mousemove', handleMouseMove);
-        containerRef.current?.addEventListener('mouseleave', handleMouseLeave);
+        document.body.addEventListener('mouseleave', handleMouseLeave);
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
-            containerRef.current?.removeEventListener('mouseleave', handleMouseLeave);
+            document.body.removeEventListener('mouseleave', handleMouseLeave);
         };
     }, []);
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gray-900 text-white overflow-hidden p-4 relative">
-             <div className="absolute inset-0 bg-gradient-to-br from-primary-900/50 via-gray-900 to-gray-900 z-0"></div>
-             <div className="absolute top-0 left-0 w-96 h-96 bg-primary-600/20 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
-             <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-600/20 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
+        <div className="min-h-screen w-full flex items-center justify-center bg-obsidian text-white overflow-hidden p-4 relative">
+            <ParticleBackground />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-obsidian z-0"></div>
 
             <div className="z-10 text-center flex flex-col items-center">
-                 <h1 className="text-5xl md:text-7xl font-black mb-4 uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-purple-400">
+                 <h1 className="text-5xl md:text-7xl font-black mb-4 uppercase tracking-wider glow-title">
                     Sua Jornada Viral
                 </h1>
                 <h2 className="text-5xl md:text-7xl font-black mb-6 uppercase tracking-wider">Começa Aqui</h2>
-                <p className="max-w-2xl text-lg text-gray-300 mb-8">
+                <p className="max-w-2xl text-lg text-gray-400 mb-8">
                     Transforme seu tempo de tela em recompensas reais. Descubra vídeos incríveis, complete missões diárias e saque seus ganhos.
                 </p>
 
-                <div ref={containerRef} style={{ transformStyle: 'preserve-3d' }}>
-                    <div style={style} className="relative w-[300px] h-[200px] md:w-[450px] md:h-[250px] bg-gray-800/20 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-md">
-                         {/* Floating elements inside the 3D card */}
-                         <div style={{ transform: 'translateZ(50px)' }}>
-                            <FloatingIcon icon={<DollarSignIcon className="w-8 h-8"/>} className="top-8 left-8" />
-                         </div>
-                         <div style={{ transform: 'translateZ(80px)' }}>
-                             <FloatingIcon icon={<VideoIcon className="w-8 h-8"/>} className="bottom-8 right-12" />
-                         </div>
-                         <div style={{ transform: 'translateZ(30px)' }}>
-                            <FloatingIcon icon={<GiftIcon className="w-8 h-8"/>} className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-                         </div>
-                    </div>
+                <div ref={containerRef} style={{ transformStyle: 'preserve-3d' }} className="my-8">
+                    <Torus style={style} />
                 </div>
 
                 <button 
                     onClick={onEnter} 
-                    className="mt-12 px-10 py-4 text-lg font-bold text-white bg-gradient-to-r from-primary-600 to-purple-600 rounded-full shadow-lg hover:shadow-primary-500/50 transform hover:scale-105 transition-all duration-300"
+                    className="shine-button mt-8 px-10 py-4 text-lg font-bold text-white bg-gradient-to-r from-neon-green to-neon-green-dark rounded-full shadow-lg shadow-neon-green/20 transform hover:scale-105 transition-all duration-300"
                 >
                     Começar a Ganhar Agora
                 </button>
