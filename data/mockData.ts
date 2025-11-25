@@ -9,65 +9,53 @@ export const mockUsers: User[] = [
   { id: 'u5', name: 'Eve', username: 'eve', email: 'eve@example.com', password: 'password123', avatar: 'https://picsum.photos/seed/eve/100', balance: 15.75, status: 'inactive', joinDate: '2023-10-15' },
 ];
 
-export const mockVideos: Video[] = [];
+export const mockVideos: Video[] = [
+    {
+        id: 'v1',
+        title: 'Big Buck Bunny tells about the story of a giant rabbit with a heart bigger than himself.',
+        thumbnail: 'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217',
+        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        duration: '09:56',
+        views: 1500000,
+        likes: 85000,
+        uploader: 'Blender Foundation',
+        uploaderAvatar: 'https://i.pravatar.cc/150?u=blender',
+    },
+    {
+        id: 'v2',
+        title: 'The first Blender Open Movie from 2006',
+        thumbnail: 'https://orange.blender.org/wp-content/themes/orange/images/media/gallery_screen01_s.jpg',
+        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        duration: '10:53',
+        views: 1200000,
+        likes: 72000,
+        uploader: 'Blender Foundation',
+        uploaderAvatar: 'https://i.pravatar.cc/150?u=blender',
+    },
+    {
+        id: 'v3',
+        title: 'HBO GO now works with Chromecast',
+        thumbnail: 'https://i.ytimg.com/vi/yZXEr-t-MR8/maxresdefault.jpg',
+        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+        duration: '00:15',
+        views: 890000,
+        likes: 45000,
+        uploader: 'Google',
+        uploaderAvatar: 'https://i.pravatar.cc/150?u=google',
+    },
+    {
+        id: 'v4',
+        title: 'Introducing Chromecast. The easiest way to enjoy online video and music on your TV.',
+        thumbnail: 'https://i.ytimg.com/vi/f2ar0ltTvaU/maxresdefault.jpg',
+        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+        duration: '01:00',
+        views: 2100000,
+        likes: 110000,
+        uploader: 'Google',
+        uploaderAvatar: 'https://i.pravatar.cc/150?u=google',
+    }
+];
 
 
 export const mockTransactions: Transaction[] = [
-  { id: 't1', type: 'earn', amount: 0.10, description: 'Watched "Awesome Video #1"', date: '2023-11-20T10:00:00Z' },
-  { id: 't2', type: 'earn', amount: 0.10, description: 'Watched "Awesome Video #2"', date: '2023-11-20T10:05:00Z' },
-  { id: 't3', type: 'bonus', amount: 5.00, description: 'Daily login bonus', date: '2023-11-20T09:00:00Z' },
-  { id: 't4', type: 'withdraw', amount: -20.00, description: 'Withdrawal via PIX', date: '2023-11-19T15:30:00Z', status: 'approved' },
-  { id: 't5', type: 'earn', amount: 0.10, description: 'Watched "Awesome Video #3"', date: '2023-11-19T14:00:00Z' },
-];
-
-export const mockDailyTasks: DailyTask[] = [
-  { id: 1, title: 'Watch 10 videos', description: 'Finish watching 10 videos today.', reward: 1.00, progress: 3, goal: 10, isCompleted: false },
-  { id: 2, title: 'Like 5 videos', description: 'Show some love to creators.', reward: 0.50, progress: 5, goal: 5, isCompleted: true },
-  { id: 3, title: 'Invite a friend', description: 'Share the fun and earn big.', reward: 10.00, progress: 0, goal: 1, isCompleted: false },
-];
-
-export const mockWithdrawalRequests: WithdrawalRequest[] = [
-  { id: 'w1', userId: 'u1', userName: 'Alice', amount: 50.00, method: 'PIX', pixKey: 'alice@email.com', date: '2023-11-20T11:00:00Z', status: 'pending' },
-  { id: 'w2', userId: 'u4', userName: 'Diana', amount: 100.00, method: 'PIX', pixKey: '123.456.789-00', date: '2023-11-19T18:00:00Z', status: 'approved' },
-  { id: 'w3', userId: 'u2', userName: 'Bob', amount: 25.00, method: 'PagBank', pixKey: '(11) 98765-4321', date: '2023-11-18T12:00:00Z', status: 'rejected' },
-];
-
-export const mockSettings: Settings = {
-  general: {
-    appName: "CASHVIRAL",
-    appLogo: null,
-    privacyPolicyUrl: "https://seu-site.com/politica-de-privacidade",
-  },
-  rewards: {
-    rewardPerVideo: 0.10,
-    minWatchTime: 30,
-    dailyLoginBonus: 0.50,
-    inviteBonus: 5.00,
-    minWithdrawal: 20.00,
-    dailyWithdrawalLimit: 100.00,
-  },
-  monetization: {
-    paymentGateways: {
-      mercadoPago: { enabled: true, apiKey: "" },
-      pagBank: { enabled: true, apiKey: "" },
-      stripe: { enabled: false, apiKey: "" },
-      paypal: { enabled: false, apiKey: "" },
-    },
-    adsense: {
-      enabled: false,
-      publisherId: "",
-    },
-    customAds: [],
-  },
-  api: {
-    youtubeApiKey: "",
-    geminiApiKey: "",
-  },
-  security: {
-    maintenanceMode: {
-      enabled: false,
-      message: "Voltamos em breve com novidades!",
-    },
-    admin2FA: false,
-  },
-};
+  { id: 't1', type: 'earn', amount: 0.10, description: 'Watched "Awesome Video #1"', date: '2023-1
