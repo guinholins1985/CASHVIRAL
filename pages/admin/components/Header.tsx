@@ -1,7 +1,7 @@
-
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../../../hooks/useTheme';
-import { SunIcon, MoonIcon, ChevronDownIcon } from '../../../components/icons';
+import { SunIcon, MoonIcon, ChevronDownIcon, LogOutIcon, UserIcon } from '../../../components/icons';
+import { useAuth } from '../../../hooks/useAuth';
 
 interface HeaderProps {
   sidebarOpen: boolean;
@@ -10,6 +10,19 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
   const { theme, toggleTheme } = useTheme();
+  const { currentUser, logout } = useAuth();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <header className="flex-shrink-0 bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-700 z-20">
@@ -26,13 +39,27 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
           <button onClick={toggleTheme} className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
             {theme === 'light' ? <MoonIcon className="w-5 h-5" /> : <SunIcon className="w-5 h-5" />}
           </button>
-          <div className="relative">
-            <button className="flex items-center space-x-2">
-              <img className="h-8 w-8 rounded-full" src="https://picsum.photos/seed/admin/100" alt="Admin" />
-              <span className="hidden md:inline text-sm font-medium">Admin User</span>
-              <ChevronDownIcon className="h-4 w-4" />
+          <div className="relative" ref={dropdownRef}>
+            <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center space-x-2">
+              <img className="h-8 w-8 rounded-full" src={currentUser?.avatar} alt={currentUser?.name} />
+              <span className="hidden md:inline text-sm font-medium">{currentUser?.name}</span>
+              <ChevronDownIcon className={`h-4 w-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
             </button>
-            {/* Dropdown can be added here */}
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
+                <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <UserIcon className="w-4 h-4 mr-2" />
+                    Meu Perfil
+                </a>
+                <button
+                  onClick={logout}
+                  className="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <LogOutIcon className="w-4 h-4 mr-2" />
+                  Sair
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

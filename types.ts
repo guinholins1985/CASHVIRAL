@@ -2,11 +2,14 @@
 export interface User {
   id: string;
   name: string;
+  username: string;
   email: string;
+  password?: string; // Made optional for security reasons, won't always be exposed
   avatar: string;
   balance: number;
   status: 'active' | 'inactive' | 'banned';
   joinDate: string;
+  isAdmin?: boolean;
 }
 
 export interface Video {

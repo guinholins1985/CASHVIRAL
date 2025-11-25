@@ -1,11 +1,12 @@
 import { User, Video, Transaction, DailyTask, WithdrawalRequest } from '../types';
 
 export const mockUsers: User[] = [
-  { id: 'u1', name: 'Alice', email: 'alice@example.com', avatar: 'https://picsum.photos/seed/alice/100', balance: 125.50, status: 'active', joinDate: '2023-10-01' },
-  { id: 'u2', name: 'Bob', email: 'bob@example.com', avatar: 'https://picsum.photos/seed/bob/100', balance: 78.20, status: 'active', joinDate: '2023-10-05' },
-  { id: 'u3', name: 'Charlie', email: 'charlie@example.com', avatar: 'https://picsum.photos/seed/charlie/100', balance: 0, status: 'banned', joinDate: '2023-10-10' },
-  { id: 'u4', name: 'Diana', email: 'diana@example.com', avatar: 'https://picsum.photos/seed/diana/100', balance: 340.00, status: 'active', joinDate: '2023-10-12' },
-  { id: 'u5', name: 'Eve', email: 'eve@example.com', avatar: 'https://picsum.photos/seed/eve/100', balance: 15.75, status: 'inactive', joinDate: '2023-10-15' },
+  { id: 'u0', name: 'Admin User', username: 'ad', email: 'admin@cashviral.com', password: 'a12', avatar: 'https://picsum.photos/seed/admin/100', balance: 9999, status: 'active', joinDate: '2023-01-01', isAdmin: true },
+  { id: 'u1', name: 'Alice', username: 'alice', email: 'alice@example.com', password: 'password123', avatar: 'https://picsum.photos/seed/alice/100', balance: 125.50, status: 'active', joinDate: '2023-10-01' },
+  { id: 'u2', name: 'Bob', username: 'bob', email: 'bob@example.com', password: 'password123', avatar: 'https://picsum.photos/seed/bob/100', balance: 78.20, status: 'active', joinDate: '2023-10-05' },
+  { id: 'u3', name: 'Charlie', username: 'charlie', email: 'charlie@example.com', password: 'password123', avatar: 'https://picsum.photos/seed/charlie/100', balance: 0, status: 'banned', joinDate: '2023-10-10' },
+  { id: 'u4', name: 'Diana', username: 'diana', email: 'diana@example.com', password: 'password123', avatar: 'https://picsum.photos/seed/diana/100', balance: 340.00, status: 'active', joinDate: '2023-10-12' },
+  { id: 'u5', name: 'Eve', username: 'eve', email: 'eve@example.com', password: 'password123', avatar: 'https://picsum.photos/seed/eve/100', balance: 15.75, status: 'inactive', joinDate: '2023-10-15' },
 ];
 
 export const mockVideos: Video[] = [];

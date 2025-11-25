@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { mockUsers, mockTransactions } from '../../data/mockData';
+import { mockTransactions } from '../../data/mockData';
 import { Transaction } from '../../types';
+import { useAuth } from '../../hooks/useAuth';
 
 const TransactionItem: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
     const isCredit = transaction.amount > 0;
@@ -20,19 +21,24 @@ const TransactionItem: React.FC<{ transaction: Transaction }> = ({ transaction }
 }
 
 const ProfilePage: React.FC = () => {
-  const user = mockUsers[0]; // Simulate logged-in user
+  const { currentUser, logout } = useAuth();
+
+  if (!currentUser) {
+    return null; // or a loading spinner
+  }
 
   return (
     <div className="h-full w-full bg-gray-900 text-white p-4 overflow-y-auto pb-20">
       <div className="flex flex-col items-center pt-8">
-        <img src={user.avatar} alt={user.name} className="w-24 h-24 rounded-full border-4 border-primary-500" />
-        <h1 className="text-2xl font-bold mt-4">{user.name}</h1>
-        <p className="text-gray-400">{user.email}</p>
+        <img src={currentUser.avatar} alt={currentUser.name} className="w-24 h-24 rounded-full border-4 border-primary-500" />
+        <h1 className="text-2xl font-bold mt-4">{currentUser.name}</h1>
+        <p className="text-gray-400">@{currentUser.username}</p>
+        <p className="text-gray-400 text-sm">{currentUser.email}</p>
       </div>
 
       <div className="my-8 bg-gray-800 p-6 rounded-xl text-center">
         <p className="text-gray-300 text-sm">Saldo Atual</p>
-        <p className="text-4xl font-bold text-yellow-400 my-2">R$ {user.balance.toFixed(2)}</p>
+        <p className="text-4xl font-bold text-yellow-400 my-2">R$ {currentUser.balance.toFixed(2)}</p>
         <button className="w-full bg-primary-600 text-white font-bold py-3 rounded-lg mt-4 hover:bg-primary-700">
           Sacar
         </button>
@@ -48,7 +54,7 @@ const ProfilePage: React.FC = () => {
       </div>
 
       <div className="mt-8 text-center">
-        <button className="text-gray-400 hover:text-red-500">
+        <button onClick={logout} className="text-gray-400 hover:text-red-500">
           Sair da Conta
         </button>
       </div>
