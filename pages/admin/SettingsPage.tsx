@@ -228,17 +228,16 @@ const SettingsPage: React.FC = () => {
               <div className="p-4 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-bold mb-4 flex items-center"><CreditCardIcon className="w-6 h-6 mr-2 text-primary-500" />Gateways de Pagamento</h2>
                 <div className="space-y-4">
-                    {/* FIX: Correctly cast the result of Object.keys to iterate over payment gateways in a type-safe manner. */}
-                    {/* FIX: Refactored to use Object.entries for improved type safety and to resolve incorrect type inference on keys. */}
-                    {(Object.entries(draftSettings.monetization.paymentGateways)).map(([key, gateway]) => {
-                        const typedKey = key as keyof typeof draftSettings.monetization.paymentGateways;
+                    {/* FIX: Use Object.keys with a type assertion to safely iterate over payment gateways, ensuring type safety for both keys and values. */}
+                    {(Object.keys(draftSettings.monetization.paymentGateways) as Array<keyof typeof draftSettings.monetization.paymentGateways>).map((key) => {
+                        const gateway = draftSettings.monetization.paymentGateways[key];
                         return (
-                         <div key={typedKey} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md">
+                         <div key={key} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md">
                             <div className="flex items-center mb-2 sm:mb-0">
-                                <ToggleSwitch enabled={gateway.enabled} onChange={(val) => handleGatewayChange(typedKey, 'enabled', val)} />
-                                <span className="ml-3 font-semibold">{typedKey.charAt(0).toUpperCase() + typedKey.slice(1).replace('pag', 'Pag')}</span>
+                                <ToggleSwitch enabled={gateway.enabled} onChange={(val) => handleGatewayChange(key, 'enabled', val)} />
+                                <span className="ml-3 font-semibold">{key.charAt(0).toUpperCase() + key.slice(1).replace('pag', 'Pag')}</span>
                             </div>
-                            <input type="password" placeholder={`Chave API do ${typedKey}`} value={gateway.apiKey} onChange={(e) => handleGatewayChange(typedKey, 'apiKey', e.target.value)} className="w-full sm:w-1/2 p-2 text-sm border rounded-md dark:bg-gray-900 dark:border-gray-600" />
+                            <input type="password" placeholder={`Chave API do ${key}`} value={gateway.apiKey} onChange={(e) => handleGatewayChange(key, 'apiKey', e.target.value)} className="w-full sm:w-1/2 p-2 text-sm border rounded-md dark:bg-gray-900 dark:border-gray-600" />
                         </div>
                     )})}
                 </div>
